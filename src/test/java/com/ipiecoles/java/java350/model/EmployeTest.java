@@ -56,7 +56,7 @@ public class EmployeTest {
         //When
         Integer anneeAnciennete = e.getNombreAnneeAnciennete();
 
-        //Then
+
         Assertions.assertEquals(0, anneeAnciennete.intValue());
     }
 
