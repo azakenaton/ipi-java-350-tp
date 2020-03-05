@@ -55,16 +55,31 @@ public class Employe {
         return getNbRtt(LocalDate.now());
     }
 
+    /**
+     * Calcul du nombre de congés
+     * @param d
+     * @return
+     */
     public Integer getNbRtt(LocalDate d){
         int i1 = d.isLeapYear() ? 365 : 366;
-        int var = 104;
+        int nbSamediDimanche = 104;
         switch (LocalDate.of(d.getYear(),1,1).getDayOfWeek()){
-            case THURSDAY: if(d.isLeapYear()) var =  var + 1; break;
-            case FRIDAY: if(d.isLeapYear()) var =  var + 2; else var =  var + 1;
-            case SATURDAY: var = var + 1; break;
+            case THURSDAY:
+                if(d.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 1;
+                    break;
+                }
+            case FRIDAY:
+                if(d.isLeapYear()) {
+                    nbSamediDimanche = nbSamediDimanche + 2;
+                } else {nbSamediDimanche = nbSamediDimanche + 1;
+                }
+            case SATURDAY:
+                nbSamediDimanche = nbSamediDimanche + 1;
+                break;
         }
         int monInt = (int) Entreprise.joursFeries(d).stream().filter(localDate -> localDate.getDayOfWeek().getValue() <= DayOfWeek.FRIDAY.getValue()).count();
-        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - var - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
+        return (int) Math.ceil((i1 - Entreprise.NB_JOURS_MAX_FORFAIT - nbSamediDimanche - Entreprise.NB_CONGES_BASE - monInt) * tempsPartiel);
     }
 
     public Double getPrimeAnnuelle(){
